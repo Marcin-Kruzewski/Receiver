@@ -2,24 +2,25 @@ package com.example.mkruz.receiver;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.ContentProviderClient;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.sqlite.SQLiteDatabase;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.mkruz.receiver.TodoTask;
-import com.example.mkruz.receiver.R;
 
 public class ListActivity extends AppCompatActivity {
 
@@ -53,7 +54,23 @@ public class ListActivity extends AppCompatActivity {
         price = findViewById(R.id.price);
         id = getIntent().getLongExtra("id", NON_EXISTING_ID);
         if (id != NON_EXISTING_ID && editedItem == null){
-            editedItem = db.getTodo(id);
+            Log.i("onCreate", "3");
+            Uri yourURI = Uri.parse("content://com.example.mkruz.shopinglist.feature.DataProvider");
+            Log.i("onCreate", "4");
+            ContentResolver yourCR = getContentResolver();
+            Log.i("onCreate", "5");
+            try {
+                Cursor c = yourCR.query(yourURI, null , null, null, null);
+                Log.i("onCreate", "5.2");
+                Log.i("onCreate", c.getString(2));
+                editedItem = new TodoTask(c.getLong(c.getColumnIndex("_id")),
+                        c.getString(c.getColumnIndex("description")),
+                        c.getInt(c.getColumnIndex("qty")),
+                        c.getFloat(c.getColumnIndex("price")),
+                        false);
+            } catch (Exception e) {
+                        Log.i("onCreate", "chuj dupa i kamieni kupa");
+            }
             Log.i("onCreate", "6");
             Toast.makeText(getApplicationContext(), editedItem.toString(), Toast.LENGTH_LONG).show();
             Log.i("onCreate", "item = " + editedItem.getDescription());
