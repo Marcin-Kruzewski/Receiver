@@ -3,6 +3,7 @@
     package="com.example.mkruz.receiver">
 
     <uses-permission android:name="pl.edu.pja.smb.MY_PERMISSION" />
+    <uses-permission android:name="com.example.mkruz.shoppinglist.feature.DataProvider.PERMISSION" />
 
     <application
         android:allowBackup="true"

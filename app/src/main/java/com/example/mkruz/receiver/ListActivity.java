@@ -54,34 +54,29 @@ public class ListActivity extends AppCompatActivity {
         price = findViewById(R.id.price);
         id = getIntent().getLongExtra("id", NON_EXISTING_ID);
         if (id != NON_EXISTING_ID && editedItem == null){
-            Log.i("onCreate", "3");
-            Uri yourURI = Uri.parse("content://com.example.mkruz.shopinglist.feature.DataProvider");
-            Log.i("onCreate", "4");
-            ContentResolver yourCR = getContentResolver();
-            Log.i("onCreate", "5");
+            Uri yourURI = Uri.parse("content://com.example.mkruz.shopinglist.feature.dataprovider.provider/item/" + id);
+            Log.i("onCreate", yourURI.toString());
             try {
-                Cursor c = yourCR.query(yourURI, null , null, null, null);
-                Log.i("onCreate", "5.2");
-                Log.i("onCreate", c.getString(2));
+                Cursor c = getContentResolver().query(yourURI, null , null, null, null);
                 editedItem = new TodoTask(c.getLong(c.getColumnIndex("_id")),
                         c.getString(c.getColumnIndex("description")),
                         c.getInt(c.getColumnIndex("qty")),
                         c.getFloat(c.getColumnIndex("price")),
                         false);
             } catch (Exception e) {
-                        Log.i("onCreate", "chuj dupa i kamieni kupa");
+                        Log.i("onCreate", "exception");
             }
-            Log.i("onCreate", "6");
+            //Log.i("onCreate", "6");
             Toast.makeText(getApplicationContext(), editedItem.toString(), Toast.LENGTH_LONG).show();
-            Log.i("onCreate", "item = " + editedItem.getDescription());
+            //Log.i("onCreate", "item = " + editedItem.getDescription());
             item.setText(editedItem.getDescription());
-            Log.i("onCreate", "7");
+            //Log.i("onCreate", "7");
             qty.setText(String.valueOf(editedItem.getQty()));
-            Log.i("onCreate", "8");
+            //Log.i("onCreate", "8");
             price.setText(String.valueOf(editedItem.getPrice()));
-            Log.i("onCreate", "9");
+            //Log.i("onCreate", "9");
             FloatingActionButton fab = findViewById(R.id.floatingActionButton1);
-            Log.i("onCreate", "10");
+            //Log.i("onCreate", "10");
             fab.setVisibility(View.VISIBLE);
         }else{
             item.setText(itemValue);
